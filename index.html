@@ -50,12 +50,12 @@ label{
     width:100%;
 }
 
-.field-container input[type="text"]{
+.field-container input{
     width:100%;
     min-width:0;
 }
 
-input[type="text"]{
+input{
     flex:1;
     height:46px;
     border:2px solid #bfc6cd;
@@ -65,15 +65,16 @@ input[type="text"]{
     font-size:16px;
     text-align:center;
     transition:0.2s;
+    -webkit-appearance:none;
 }
 
-input[type="text"]:focus{
+input:focus{
     outline:none;
     border-color:#57c785;
 }
 
 .yellow-bg{
-    background:#f7eb75 !important;
+    background:#fff7a6 !important;
 }
 
 .clear-btn{
@@ -89,6 +90,8 @@ input[type="text"]:focus{
     font-weight:bold;
     cursor:pointer;
     user-select:none;
+    -webkit-user-select:none;
+    touch-action:manipulation;
     flex-shrink:0;
 }
 
@@ -158,8 +161,19 @@ button:hover{
 <label>Kutu Ürün Fiyatı</label>
 
 <div class="field-container">
-<input type="text" id="kutuFiyat">
-<div class="clear-btn" onclick="temizleKutu('kutuFiyat')">×</div>
+
+<input
+type="tel"
+inputmode="decimal"
+pattern="[0-9.,]*"
+id="kutuFiyat">
+
+<div class="clear-btn"
+ontouchstart="temizleKutu('kutuFiyat'); event.preventDefault();"
+onmousedown="temizleKutu('kutuFiyat'); event.preventDefault();">
+×
+</div>
+
 </div>
 
 </div>
@@ -169,8 +183,20 @@ button:hover{
 <label>Kutu İçindeki Adet</label>
 
 <div class="field-container">
-<input type="text" id="adet" class="yellow-bg">
-<div class="clear-btn" onclick="temizleKutu('adet')">×</div>
+
+<input
+type="tel"
+inputmode="decimal"
+pattern="[0-9.,]*"
+id="adet"
+class="yellow-bg">
+
+<div class="clear-btn"
+ontouchstart="temizleKutu('adet'); event.preventDefault();"
+onmousedown="temizleKutu('adet'); event.preventDefault();">
+×
+</div>
+
 </div>
 
 </div>
@@ -180,8 +206,19 @@ button:hover{
 <label>Tekli Ürün Satış Fiyatı</label>
 
 <div class="field-container">
-<input type="text" id="tekliFiyat">
-<div class="clear-btn" onclick="temizleKutu('tekliFiyat')">×</div>
+
+<input
+type="tel"
+inputmode="decimal"
+pattern="[0-9.,]*"
+id="tekliFiyat">
+
+<div class="clear-btn"
+ontouchstart="temizleKutu('tekliFiyat'); event.preventDefault();"
+onmousedown="temizleKutu('tekliFiyat'); event.preventDefault();">
+×
+</div>
+
 </div>
 
 </div>
@@ -219,19 +256,30 @@ Kutu Avantajı
 
 function temizleKutu(id){
 
-    document.getElementById(id).value = "";
+    const input = document.getElementById(id);
+
+    input.value = "";
+
+    setTimeout(function(){
+
+        input.focus();
+
+    },0);
 
 }
 
 function sayiyaCevir(id){
 
-    let value = document.getElementById(id).value.trim();
+    let value =
+        document.getElementById(id).value.trim();
 
     if(value === ""){
         return 0;
     }
 
-    value = value.replace(/\./g,"").replace(",",".");
+    value = value
+        .replace(/\./g,"")
+        .replace(",", ".");
 
     let sayi = parseFloat(value);
 
@@ -241,7 +289,9 @@ function sayiyaCevir(id){
 function hesapla(){
 
     let kutuFiyat = sayiyaCevir("kutuFiyat");
+
     let adet = sayiyaCevir("adet");
+
     let tekliFiyat = sayiyaCevir("tekliFiyat");
 
     if(kutuFiyat <= 0){
@@ -265,7 +315,8 @@ function hesapla(){
 
     }
 
-    let adetFiyati = kutuFiyat / adet;
+    let adetFiyati =
+        kutuFiyat / adet;
 
     let indirimOrani =
         ((tekliFiyat - adetFiyati) / tekliFiyat) * 100;
@@ -284,7 +335,8 @@ function hesapla(){
     document.getElementById("resIndirim").innerText =
         "%" + indirimOrani.toLocaleString("tr-TR",fmt);
 
-    document.getElementById("sonucAlani").style.display = "block";
+    document.getElementById("sonucAlani").style.display =
+        "block";
 
 }
 
@@ -295,6 +347,7 @@ document.querySelectorAll("input").forEach(function(input){
         if(e.key === "Enter"){
 
             e.preventDefault();
+
             hesapla();
 
         }
