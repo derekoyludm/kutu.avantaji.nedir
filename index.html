@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <!-- 🟢 Mobil cihazlarda veri girerken otomatik yakınlaşmayı (zoom) kesin olarak engelleyen meta etiket -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, user-scalable=no">
-
 <title>Adet Fiyat Karşılaştırma</title>
 
 <style>
@@ -14,6 +13,7 @@
     -webkit-tap-highlight-color:transparent;
 }
 
+/* 💻📱 Hem bilgisayarda hem telefonda dikey ve yatay tam ortalama sağlayan esnek yapı */
 body{
     margin:0;
     padding:20px;
@@ -22,17 +22,18 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    min-height: 100vh; /* Ekranı tam kaplayarak dikeyde de ortalar */
+    min-height: 100vh;
 }
 
+/* 🟢 Kutunun genişlik dengesini hem PC hem mobil için koruyan alan */
 .container{
     width:100%;
-    max-width:470px;
+    max-width:440px; /* Diğer kodlar ile ideal genişlik eşitlendi */
     background:#fff;
     border-radius:18px;
     padding:26px;
     box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    margin: auto;
+    margin: auto; /* Dış boşlukları otomatik dağıtarak ekstra ortalama sağlar */
 }
 
 .input-group{
@@ -41,10 +42,10 @@ body{
 
 label{
     display:block;
-    margin-bottom:8px;
-    font-size:14px;
-    font-weight:700;
-    color:#3d4f66;
+    margin-bottom:6px;
+    font-weight:500;
+    font-size:13px;
+    color:#6b7a90;
 }
 
 .field-container{
@@ -53,15 +54,16 @@ label{
     gap:8px;
 }
 
-input{
-    flex:1;
-    height:46px;
+input,
+button{
+    width:100%;
+    height:46px; /* Yükseklik standardı 46px olarak eşitlendi */
     border:1.5px solid #c9d2dc;
     border-radius:8px;
-    background:#fff;
-    padding:0 14px;
-    font-size:16px; /* 🟢 Yakınlaşmayı önleyen kritik sınır (Minimum 16px) */
+    font-size:16px; 
     text-align:center;
+    background:#fff;
+    font-weight:400;
     transition:.15s;
 }
 
@@ -69,23 +71,30 @@ input{
 input:focus{
     outline:none;
     font-size:16px !important;
-    border-color:#8fd4ae;
-    box-shadow:0 0 0 4px rgba(143,212,174,0.35);
+    border-color:#8fd4ae !important;
+    box-shadow:0 0 0 4px rgba(143,212,174,0.45) !important;
 }
 
+/* TEMİZLE (X) BUTONU */
 .clear-btn{
     width:40px;
     height:46px;
+    min-width:40px;
     background:#3498db;
     border-radius:8px;
     display:flex;
     justify-content:center;
     align-items:center;
     color:#fff;
-    font-size:22px;
-    font-weight:bold;
+    font-size:16px; /* Diğer butonlardaki X boyutu ile eşitlendi */
+    font-weight:600;
     cursor:pointer;
+    user-select: none;
     flex-shrink:0;
+}
+
+.clear-btn:hover{
+    background:#2587ca;
 }
 
 .button-row{
@@ -94,71 +103,91 @@ input:focus{
     margin-top:10px;
 }
 
-button{
-    width:100%;
-    height:50px;
-    border-radius:8px;
-    border:1.5px solid #c9d2dc;
+/* ANA BUTON STİLLERİ */
+.main-btn{
+    flex:1;
     background:#fff;
-    font-size:17px;
-    font-weight:700;
-    cursor:pointer;
-    transition:.15s;
     color:#2c3e50;
+    font-weight:600;
+    cursor:pointer;
+    border:1.5px solid #c9d2dc;
+    transition:.15s;
 }
 
-button:focus{
+.main-btn:hover{
+    background:#f6f8fa;
+}
+
+.main-btn:focus,
+.main-btn:active{
     outline:none;
-    box-shadow:none;
+    border-color:#8fd4ae;
+    box-shadow:0 0 0 4px rgba(143,212,174,0.35);
 }
 
-button:focus-visible{
-    outline:none;
-    box-shadow:none;
-}
-
-/* 🟢 HESAPLA AKTİF */
-button.active-calc{
+button.clicked-blue{
     border-color:#8fd4ae !important;
     box-shadow:0 0 0 4px rgba(143,212,174,0.45) !important;
 }
 
-/* 🔴 RESET AKTİF */
-button.active-reset{
-    border-color:#e74c3c !important;
-    box-shadow:0 0 0 4px rgba(231,76,60,0.35) !important;
+/* SIFIRLA BUTONU */
+.reset-btn{
+    width:46px;
+    min-width:46px;
+    background:#fff;
+    color:#2c3e50;
+    border:1.5px solid #c9d2dc;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.15s;
 }
 
+.reset-btn:hover{
+    background:#f6f8fa;
+}
+
+.reset-btn:focus,
+.reset-btn:active,
+.reset-btn.active-reset{
+    outline:none;
+    border-color:#e74c3c;
+    box-shadow:0 0 0 4px rgba(231,76,60,0.35);
+}
+
+/* SONUÇ ALANI */
 .result{
     display:none;
     margin-top:20px;
-    background:#ecfdf5;
+    background:#f7fbf9;
+    padding:15px;
     border-radius:10px;
-    padding:18px;
 }
 
 .result p{
-    margin:12px 0;
-    color:#2c3e50;
-    font-size:15px;
+    margin:8px 0;
+    font-size:14px;
+    color:#3d4f66;
 }
 
 .highlight{
     float:right;
-    font-weight:bold;
+    font-weight:600;
+    color:#2c3e50;
 }
 
+/* KUTU AVANTAJI ALANI (Yandan yeşil çizgili kutu yapısı) */
 .final-box{
-    background:#d4efdf;
-    padding:14px;
-    border-radius:8px;
     margin-top:12px;
-    border-left:5px solid #2ecc71;
+    padding:10px;
+    background:#eaf7ef;
+    border-left:4px solid #2ecc71;
+    border-radius:8px;
 }
 
-.green{
-    color:#27ae60;
-    font-weight:bold;
+.final-box p{
+    margin:6px 0;
+    font-size:13px;
 }
 
 </style>
@@ -195,11 +224,11 @@ button.active-reset{
 
 <div class="button-row">
 
-<button id="hesaplaBtn" onclick="hesapla()">
+<button id="hesaplaBtn" class="main-btn" onclick="hesapla()">
 Hesapla
 </button>
 
-<button id="resetBtn" onclick="resetAll(event)">
+<button class="reset-btn" onclick="resetAll(event)">
 ↺
 </button>
 
@@ -207,21 +236,11 @@ Hesapla
 
 <div class="result" id="sonucAlani">
 
-<p>
-Kutu 1 Adet Fiyat
-<span class="highlight" id="resAdetFiyat"></span>
-</p>
-
-<p>
-Tekli Fiyat
-<span class="highlight" id="resTekli"></span>
-</p>
+<p>Kutu 1 Adet Fiyat <span class="highlight" id="resAdetFiyat"></span></p>
+<p>Tekli Fiyat <span class="highlight" id="resTekli"></span></p>
 
 <div class="final-box">
-<p class="green">
-Kutu Avantajı
-<span class="highlight" id="resIndirim"></span>
-</p>
+<p><b>Kutu Avantajı</b> <span class="highlight" id="resIndirim"></span></p>
 </div>
 
 </div>
@@ -245,38 +264,32 @@ function temizle(e, id){
         if(typeof el.setSelectionRange === "function") {
             el.setSelectionRange(0, 0); 
         }
-    }, 40);
+    }, 10);
 }
 
 function sayiyaCevir(id){
     let v = document.getElementById(id).value.trim();
     if(!v) return 0;
-    return parseFloat(v.replace(/\./g,"").replace(",", ".")) || 0;
+    return parseFloat(v.replace(/\./g,"").replace(/,/g,".")) || 0;
 }
 
 /* 🟢 HESAPLA */
 function hesapla(){
+    let btn = document.getElementById("hesaplaBtn");
+    btn.classList.add("clicked-blue");
+
     let kutuFiyat = sayiyaCevir("kutuFiyat");
     let adet = sayiyaCevir("adet");
     let tekliFiyat = sayiyaCevir("tekliFiyat");
 
-    // Değerler boş veya sıfır olsa dahi hata vermemesi için güvenli hesaplama kontrolleri
     let adetFiyat = adet > 0 ? (kutuFiyat / adet) : 0;
     let indirim = tekliFiyat > 0 ? (((tekliFiyat - adetFiyat) / tekliFiyat) * 100) : 0;
 
-    document.getElementById("resAdetFiyat").innerText =
-        adetFiyat.toFixed(2) + " TL";
+    document.getElementById("resAdetFiyat").innerText = adetFiyat.toFixed(2) + " TL";
+    document.getElementById("resTekli").innerText = tekliFiyat.toFixed(2) + " TL";
+    document.getElementById("resIndirim").innerText = "%" + indirim.toFixed(2);
 
-    document.getElementById("resTekli").innerText =
-        tekliFiyat.toFixed(2) + " TL";
-
-    document.getElementById("resIndirim").innerText =
-        "%" + indirim.toFixed(2);
-
-    // 🟢 Koşul aranmaksızın sonuç alanı görünür hale getirilir
     document.getElementById("sonucAlani").style.display = "block";
-    document.getElementById("hesaplaBtn").classList.add("active-calc");
-    document.getElementById("resetBtn").classList.remove("active-reset");
 
     /* 🔥 ODAK TEMİZLEME */
     document.querySelectorAll("input").forEach(i => {
@@ -291,14 +304,15 @@ function resetAll(e){
     document.querySelectorAll("input").forEach(i => i.value = "");
     document.getElementById("sonucAlani").style.display = "none";
 
-    document.getElementById("resetBtn").classList.add("active-reset");
-    document.getElementById("hesaplaBtn").classList.remove("active-calc");
+    let resetBtn = e.currentTarget;
+    resetBtn.classList.add("active-reset");
+    document.getElementById("hesaplaBtn").classList.remove("clicked-blue");
 }
 
 /* RESET STATE */
 function resetState(){
-    document.getElementById("resetBtn").classList.remove("active-reset");
-    document.getElementById("hesaplaBtn").classList.remove("active-calc");
+    document.querySelector(".reset-btn").classList.remove("active-reset");
+    document.getElementById("hesaplaBtn").classList.remove("clicked-blue");
     document.getElementById("sonucAlani").style.display = "none";
 }
 
@@ -308,7 +322,6 @@ document.querySelectorAll("input").forEach(i => {
         resetState();
     });
 
-    // Kutunun içine tıklandığında mevcut yazıyı otomatik seçer
     i.addEventListener("focus", () => {
         setTimeout(() => { i.select(); }, 50);
     });
@@ -319,6 +332,7 @@ document.querySelectorAll("input").forEach((input, index, list) => {
     input.addEventListener("keydown", (e) => {
         if(e.key === "Enter"){
             e.preventDefault();
+            document.activeElement.blur();
             resetState();
 
             let next = list[index + 1];
