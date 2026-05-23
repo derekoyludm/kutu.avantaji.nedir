@@ -10,6 +10,7 @@
 
 *{
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
 body{
@@ -24,7 +25,7 @@ body{
 .container{
     width:100%;
     max-width:470px;
-    background:#ffffff;
+    background:#fff;
     border-radius:18px;
     padding:26px;
     box-shadow:0 6px 18px rgba(0,0,0,0.08);
@@ -32,7 +33,6 @@ body{
 
 .input-group{
     margin-bottom:18px;
-    width:100%;
 }
 
 label{
@@ -47,34 +47,24 @@ label{
     display:flex;
     align-items:center;
     gap:8px;
-    width:100%;
-}
-
-.field-container input{
-    width:100%;
-    min-width:0;
 }
 
 input{
     flex:1;
     height:46px;
-    border:2px solid #bfc6cd;
+    border:1.5px solid #c9d2dc;
     border-radius:8px;
     background:#fff;
     padding:0 14px;
     font-size:16px;
     text-align:center;
-    transition:0.2s;
-    -webkit-appearance:none;
+    transition:.15s;
 }
 
 input:focus{
     outline:none;
-    border-color:#57c785;
-}
-
-.yellow-bg{
-    background:#fff7a6 !important;
+    border-color:#8fd4ae;
+    box-shadow:0 0 0 4px rgba(143,212,174,0.35);
 }
 
 .clear-btn{
@@ -85,36 +75,51 @@ input:focus{
     display:flex;
     justify-content:center;
     align-items:center;
-    color:white;
+    color:#fff;
     font-size:22px;
     font-weight:bold;
     cursor:pointer;
-    user-select:none;
-    -webkit-user-select:none;
-    touch-action:manipulation;
-    flex-shrink:0;
 }
 
-.clear-btn:hover{
-    background:#2587ca;
+.button-row{
+    display:flex;
+    gap:10px;
+    margin-top:10px;
 }
 
 button{
     width:100%;
     height:50px;
-    border:none;
     border-radius:8px;
-    background:#2ecc71;
-    color:white;
+    border:1.5px solid #c9d2dc;
+    background:#fff;
     font-size:17px;
     font-weight:700;
     cursor:pointer;
-    margin-top:10px;
-    transition:0.2s;
+    transition:.15s;
+    color:#2c3e50;
 }
 
-button:hover{
-    background:#28b765;
+button:focus{
+    outline:none;
+    box-shadow:none;
+}
+
+button:focus-visible{
+    outline:none;
+    box-shadow:none;
+}
+
+/* 🟢 HESAPLA AKTİF */
+button.active-calc{
+    border-color:#8fd4ae !important;
+    box-shadow:0 0 0 4px rgba(143,212,174,0.45) !important;
+}
+
+/* 🔴 RESET AKTİF */
+button.active-reset{
+    border-color:#e74c3c !important;
+    box-shadow:0 0 0 4px rgba(231,76,60,0.35) !important;
 }
 
 .result{
@@ -157,95 +162,58 @@ button:hover{
 <div class="container">
 
 <div class="input-group">
-
 <label>Kutu Ürün Fiyatı</label>
-
 <div class="field-container">
-
-<input
-type="tel"
-inputmode="decimal"
-pattern="[0-9.,]*"
-id="kutuFiyat">
-
-<div class="clear-btn"
-ontouchstart="temizleKutu('kutuFiyat'); event.preventDefault();"
-onmousedown="temizleKutu('kutuFiyat'); event.preventDefault();">
-×
+<input id="kutuFiyat" type="text">
+<div class="clear-btn" onclick="temizle('kutuFiyat')">×</div>
 </div>
-
-</div>
-
 </div>
 
 <div class="input-group">
-
 <label>Kutu İçindeki Adet</label>
-
 <div class="field-container">
-
-<input
-type="tel"
-inputmode="decimal"
-pattern="[0-9.,]*"
-id="adet"
-class="yellow-bg">
-
-<div class="clear-btn"
-ontouchstart="temizleKutu('adet'); event.preventDefault();"
-onmousedown="temizleKutu('adet'); event.preventDefault();">
-×
+<input id="adet" type="text">
+<div class="clear-btn" onclick="temizle('adet')">×</div>
 </div>
-
-</div>
-
 </div>
 
 <div class="input-group">
-
 <label>Tekli Ürün Satış Fiyatı</label>
-
 <div class="field-container">
-
-<input
-type="tel"
-inputmode="decimal"
-pattern="[0-9.,]*"
-id="tekliFiyat">
-
-<div class="clear-btn"
-ontouchstart="temizleKutu('tekliFiyat'); event.preventDefault();"
-onmousedown="temizleKutu('tekliFiyat'); event.preventDefault();">
-×
+<input id="tekliFiyat" type="text">
+<div class="clear-btn" onclick="temizle('tekliFiyat')">×</div>
+</div>
 </div>
 
-</div>
+<div class="button-row">
 
-</div>
-
-<button onclick="hesapla()">
-Karşılaştırmayı Hesapla
+<button id="hesaplaBtn" onclick="hesapla()">
+Hesapla
 </button>
+
+<button id="resetBtn" onclick="resetAll()">
+↺
+</button>
+
+</div>
 
 <div class="result" id="sonucAlani">
 
 <p>
-Kutu İçin. Çıkan 1 Ad. Fiyatı
-<span class="highlight" id="resAdetFiyat">0,00 TL</span>
+Kutu 1 Adet Fiyat
+<span class="highlight" id="resAdetFiyat"></span>
 </p>
 
 <p>
-Tekli Barkod Satış Fiyatı
-<span class="highlight" id="resTekli">0,00 TL</span>
+Tekli Fiyat
+<span class="highlight" id="resTekli"></span>
 </p>
 
 <div class="final-box">
-
 <p class="green">
 Kutu Avantajı
-<span class="highlight" id="resIndirim">%0,00</span>
+<span class="highlight" id="resIndirim"></span>
 </p>
-
 </div>
 
 </div>
@@ -254,106 +222,97 @@ Kutu Avantajı
 
 <script>
 
-function temizleKutu(id){
-
-    const input = document.getElementById(id);
-
-    input.value = "";
-
-    setTimeout(function(){
-
-        input.focus();
-
-    },0);
-
+function temizle(id){
+    document.getElementById(id).value="";
+    document.getElementById(id).focus();
+    resetState();
 }
 
 function sayiyaCevir(id){
-
-    let value =
-        document.getElementById(id).value.trim();
-
-    if(value === ""){
-        return 0;
-    }
-
-    value = value
-        .replace(/\./g,"")
-        .replace(",", ".");
-
-    let sayi = parseFloat(value);
-
-    return isNaN(sayi) ? 0 : sayi;
+    let v=document.getElementById(id).value.trim();
+    if(!v) return 0;
+    return parseFloat(v.replace(/\./g,"").replace(",", ".")) || 0;
 }
 
+/* 🟢 HESAPLA */
 function hesapla(){
 
-    let kutuFiyat = sayiyaCevir("kutuFiyat");
+    let kutuFiyat=sayiyaCevir("kutuFiyat");
+    let adet=sayiyaCevir("adet");
+    let tekliFiyat=sayiyaCevir("tekliFiyat");
 
-    let adet = sayiyaCevir("adet");
+    if(kutuFiyat<=0 || adet<=0 || tekliFiyat<=0) return;
 
-    let tekliFiyat = sayiyaCevir("tekliFiyat");
-
-    if(kutuFiyat <= 0){
-
-        alert("Kutu fiyatını giriniz.");
-        return;
-
-    }
-
-    if(adet <= 0){
-
-        alert("Adet bilgisi giriniz.");
-        return;
-
-    }
-
-    if(tekliFiyat <= 0){
-
-        alert("Tekli ürün fiyatını giriniz.");
-        return;
-
-    }
-
-    let adetFiyati =
-        kutuFiyat / adet;
-
-    let indirimOrani =
-        ((tekliFiyat - adetFiyati) / tekliFiyat) * 100;
-
-    let fmt = {
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-    };
+    let adetFiyat=kutuFiyat/adet;
+    let indirim=((tekliFiyat-adetFiyat)/tekliFiyat)*100;
 
     document.getElementById("resAdetFiyat").innerText =
-        adetFiyati.toLocaleString("tr-TR",fmt) + " TL";
+        adetFiyat.toFixed(2)+" TL";
 
     document.getElementById("resTekli").innerText =
-        tekliFiyat.toLocaleString("tr-TR",fmt) + " TL";
+        tekliFiyat.toFixed(2)+" TL";
 
     document.getElementById("resIndirim").innerText =
-        "%" + indirimOrani.toLocaleString("tr-TR",fmt);
+        "%"+indirim.toFixed(2);
 
-    document.getElementById("sonucAlani").style.display =
-        "block";
+    document.getElementById("sonucAlani").style.display="block";
 
+    document.getElementById("hesaplaBtn").classList.add("active-calc");
+
+    /* 🔥 KRİTİK DÜZELTME */
+    document.querySelectorAll("input").forEach(i=>{
+        i.blur(); // focus temizle
+    });
 }
 
-document.querySelectorAll("input").forEach(function(input){
+/* 🔴 RESET */
+function resetAll(){
 
-    input.addEventListener("keydown",function(e){
+    document.querySelectorAll("input").forEach(i=>i.value="");
+    document.getElementById("sonucAlani").style.display="none";
 
-        if(e.key === "Enter"){
+    document.getElementById("resetBtn").classList.add("active-reset");
+    document.getElementById("hesaplaBtn").classList.remove("active-calc");
+}
 
+/* RESET STATE */
+function resetState(){
+
+    document.getElementById("resetBtn")
+        .classList.remove("active-reset");
+
+    document.getElementById("hesaplaBtn")
+        .classList.remove("active-calc");
+
+    document.getElementById("sonucAlani")
+        .style.display="none";
+}
+
+/* INPUT CHANGE */
+document.querySelectorAll("input").forEach(i=>{
+    i.addEventListener("input", ()=>{
+        resetState();
+    });
+});
+
+/* ENTER NAV + FIX */
+document.querySelectorAll("input").forEach((input,index,list)=>{
+    input.addEventListener("keydown",(e)=>{
+        if(e.key==="Enter"){
             e.preventDefault();
 
-            hesapla();
+            resetState(); // 🔥 kritik
 
+            let next=list[index+1];
+
+            if(next){
+                next.focus();
+                next.select();
+            }else{
+                hesapla();
+            }
         }
-
     });
-
 });
 
 </script>
